@@ -26,7 +26,6 @@ const TodoForm = () => {
       )
       .then((res) => {
         setTodo("");
-        setTodos([...todos, res]);
       })
       .catch((err) => alert(err.message));
   };

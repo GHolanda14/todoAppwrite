@@ -1,6 +1,6 @@
 import { AppBar, Button, Grid, Typography } from "@mui/material";
 import { Client } from "appwrite";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Todo from "../../components/Todo/Todo";
 import TodoForm from "../../components/TodoForm/TodoForm";
@@ -9,31 +9,42 @@ import { TodoContext } from "../../context/TodosContext";
 
 const Profile = () => {
   const [userDetails, setUserDetails] = useState();
-  const { todos, setTodos, setUser } = useContext(TodoContext);
+  const { setUser } = useContext(TodoContext);
+  const [todos, setTodos] = useState("");
   const navigate = useNavigate();
 
   client.subscribe(
     "databases.633496a02113c179a318.collections.633496a50483ad68bf49.documents",
     (response) => {
-      if (
-        response.events.includes("databases.*.collections.*.documents.*.delete")
-      ) {
-        setTodos(todos.filter((todo) => response.payload.$id != todo.$id));
-      } else if (
-        response.events.includes("databases.*.collections.*.documents.*.create")
-      ) {
-        setTodos([...todos, response.payload]);
-      } else if (
-        response.events.includes("databases.*.collections.*.documents.*.update")
-      ) {
-        setTodos(
-          todos.map((todo) => {
-            if (todo.$id === response.payload.$id) {
-              return response.payload;
-            }
-            return todo;
-          })
-        );
+      if (todos) {
+        if (
+          response.events.includes(
+            "databases.*.collections.*.documents.*.delete"
+          )
+        ) {
+          setTodos(todos.filter((todo) => response.payload.$id != todo.$id));
+        } else if (
+          response.events.includes(
+            "databases.*.collections.*.documents.*.create"
+          )
+        ) {
+          setTodos([...todos, response.payload]);
+        } else if (
+          response.events.includes(
+            "databases.*.collections.*.documents.*.update"
+          )
+        ) {
+          console.log("atualizei");
+          //Consertar esse filter ai, console.log(response.payload)
+          setTodos(
+            todos.map((todo) => {
+              if (todo.$id === response.payload.$id) {
+                return response.payload;
+              }
+              return todo;
+            })
+          );
+        }
       }
     }
   );
