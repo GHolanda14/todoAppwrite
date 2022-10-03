@@ -19,28 +19,24 @@ const Profile = () => {
       if (todos) {
         if (
           response.events.includes(
-            "databases.*.collections.*.documents.*.delete"
+            "databases.633496a02113c179a318.collections.633496a50483ad68bf49.documents.*.delete"
           )
         ) {
-          setTodos(todos.filter((todo) => response.payload.$id != todo.$id));
+          setTodos(todos.filter((todo) => response.payload.$id !== todo.$id));
         } else if (
           response.events.includes(
-            "databases.*.collections.*.documents.*.create"
+            "databases.633496a02113c179a318.collections.633496a50483ad68bf49.documents.*.create"
           )
         ) {
           setTodos([...todos, response.payload]);
         } else if (
           response.events.includes(
-            "databases.*.collections.*.documents.*.update"
+            "databases.633496a02113c179a318.collections.633496a50483ad68bf49.documents.*.update"
           )
         ) {
-          console.log("atualizei");
-          //Consertar esse filter ai, console.log(response.payload)
           setTodos(
             todos.map((todo) => {
-              if (todo.$id === response.payload.$id) {
-                return response.payload;
-              }
+              if (todo.$id === response.payload.$id) return response.payload;
               return todo;
             })
           );
@@ -58,7 +54,7 @@ const Profile = () => {
           .then((res) => {
             setTodos(res.documents);
           })
-          .catch((err) => alert(err.message));
+          .catch((err) => console.log(err.message));
       },
       (error) => {
         console.log(error);

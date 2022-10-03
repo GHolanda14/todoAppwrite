@@ -1,25 +1,26 @@
+import DeleteIcon from "@mui/icons-material/Delete";
+import DoneIcon from "@mui/icons-material/Done";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Button,
   FormControl,
-  IconButton,
   OutlinedInput,
   Paper,
   Switch,
-  TextField,
   Typography,
 } from "@mui/material";
-import React, { useContext, useState } from "react";
-import DeleteIcon from "@mui/icons-material/Delete";
+import React, { useEffect, useState } from "react";
 import { databases } from "../../config/appWriteConfig";
-import { TodoContext } from "../../context/TodosContext";
-import EditIcon from "@mui/icons-material/Edit";
-import DoneIcon from "@mui/icons-material/Done";
 
 const Todo = ({ todo }) => {
-  const { todos, setTodos } = useContext(TodoContext);
   const [edit, setEdit] = useState(false);
-  const [task, setTask] = useState(todo.todo);
-  const [checked, setChecked] = useState(todo.done);
+  const [task, setTask] = useState("");
+  const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    setTask(todo.todo);
+    setChecked(todo.done);
+  }, [todo]);
 
   const handleChange = (id) => {
     databases.updateDocument(
@@ -49,10 +50,10 @@ const Todo = ({ todo }) => {
         id,
         {
           todo: task,
+          done: checked,
         }
       );
     }
-
     setEdit(!edit);
   };
 
@@ -71,6 +72,7 @@ const Todo = ({ todo }) => {
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
+          maxWidth: "70%",
           flexGrow: 1,
         }}
         variant="outlined"
@@ -82,11 +84,13 @@ const Todo = ({ todo }) => {
             value={task}
             onChange={(e) => setTask(e.target.value)}
             fullWidth
+            multiline
+            maxRows={4}
           />
         ) : (
           <Typography
             variant="body1"
-            sx={{ textDecoration: checked ? "line-through" : "none" }}
+            sx={{ textDecoration: todo.done ? "line-through" : "none" }}
           >
             {task}
           </Typography>
