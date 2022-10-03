@@ -1,19 +1,22 @@
 import React, { useContext, useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Register from "../pages/Register/Register";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { account } from "../config/appWriteConfig";
+import { TodoContext } from "../context/TodosContext";
 import ConfirmEmail from "../pages/ConfirmEmail/ConfirmEmail";
 import Login from "../pages/Login/Login";
 import Profile from "../pages/Profile/Profile";
-import { account } from "../config/appWriteConfig";
-import { TodoContext } from "../context/TodosContext";
+import Register from "../pages/Register/Register";
 
 const Rotas = () => {
   const { user, setUser } = useContext(TodoContext);
+
   useEffect(() => {
-    account.get().then(
-      (res) => setUser(res),
-      (err) => console.log(err)
-    );
+    if (localStorage.getItem("cookieFallback").includes("session")) {
+      account.get().then(
+        (res) => setUser(res),
+        (err) => console.log(err.message)
+      );
+    }
   }, []);
   return (
     <BrowserRouter>
