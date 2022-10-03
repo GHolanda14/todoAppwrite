@@ -18,7 +18,9 @@ const Todo = ({ todo }) => {
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    setTask(todo.todo);
+    if (!edit) {
+      setTask(todo.todo);
+    }
     setChecked(todo.done);
   }, [todo]);
 
@@ -90,7 +92,7 @@ const Todo = ({ todo }) => {
         ) : (
           <Typography
             variant="body1"
-            sx={{ textDecoration: todo.done ? "line-through" : "none" }}
+            sx={{ textDecoration: checked ? "line-through" : "none" }}
           >
             {task}
           </Typography>
