@@ -9,11 +9,9 @@ import {
 } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { databases, id } from "../../config/appWriteConfig";
-import { TodoContext } from "../../context/TodosContext";
 
 const TodoForm = () => {
   const [todo, setTodo] = useState("");
-  const { todos, setTodos } = useContext(TodoContext);
   const handleAdd = () => {
     databases
       .createDocument(

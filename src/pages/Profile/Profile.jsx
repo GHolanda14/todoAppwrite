@@ -1,10 +1,9 @@
 import { AppBar, Button, Grid, Typography } from "@mui/material";
-import { Client } from "appwrite";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Todo from "../../components/Todo/Todo";
 import TodoForm from "../../components/TodoForm/TodoForm";
-import { account, databases, client } from "../../config/appWriteConfig";
+import { account, client, databases } from "../../config/appWriteConfig";
 import { TodoContext } from "../../context/TodosContext";
 
 const Profile = () => {
